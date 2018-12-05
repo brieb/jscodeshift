@@ -13,7 +13,9 @@
 const EventEmitter = require('events').EventEmitter;
 
 const async = require('neo-async');
+const escapeRegExp = require('lodash/escapeRegExp');
 const fs = require('graceful-fs');
+const path = require('path');
 const writeFileAtomic = require('write-file-atomic');
 const { DEFAULT_EXTENSIONS } = require('@babel/core');
 const getParser = require('./getParser');
@@ -63,7 +65,7 @@ function setup(tr, babel) {
       extensions: [...DEFAULT_EXTENSIONS, '.ts', '.tsx'],
       // By default, babel register only compiles things inside the current working directory.
       // https://github.com/babel/babel/blob/2a4f16236656178e84b05b8915aab9261c55782c/packages/babel-register/src/node.js#L140-L157
-      ignore: []
+      ignore: [new RegExp(escapeRegExp(path.sep + 'node_modules' + path.sep))]
     });
   }
 
